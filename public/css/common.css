@@ -1,0 +1,74 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: Arial;
+}
+header{
+    height: 200px;
+    background-color: #994b1e;
+}
+.container{
+    max-width: 1024px;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+
+.films{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+.films .film{
+    width: 300px;
+    box-shadow: 2px 2px 2px 0 gray;
+    margin-bottom: 20px;
+}
+.films .film a{
+    text-decoration: none;
+}
+
+.films .film .image{
+    width: 300px;
+    height: 400px;
+    background-size: cover;
+}
+.films .film .info{
+    padding: 10px;
+    background-color:#994b1e;
+}
+.films .film .info .name{
+    color: #fff;
+    font-size: 24px;
+}
+.films .film .info .year-rate{
+    display: flex;
+    color: white;
+}
+.films .film .info .year-rate .year{
+    flex-grow: 1;
+    padding: 10px;
+}
+.films .film .info .year-rate .rate{
+    background-color: #df873c;
+    padding: 10px;
+}
+
+
+
+.film-info{
+    display: flex;
+}
+.film-info .film-img{
+    width: 300px;
+    height: 400px;
+    background-size: cover;
+    box-shadow: 2px 2px 5px 0 gray;
+}
+.film-info .film-chars{
+    padding: 20px;
+}
+.film-info .film-chars dd{
+    padding-left: 30px;
+    margin-bottom: 10px;
+}
