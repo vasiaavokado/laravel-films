@@ -4,92 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ControllerMain extends Controller
 {
-    private $films = [
-        [
-            "id"=>1,
-            "name"=>"Молчание ягнят",
-            "actors"=>["Хопкинс","Вася пупкин"],
-            "year"=>2012,
-            "genres"=>["Ужасы","Комедия"],
-            "description"=>"Lorem ipsum ....",
-            "rate"=>4.2,
-            "img"=>"https://st.kp.yandex.net/images/film_iphone/iphone360_345.jpg"
-        ],
-        [
-            "id"=>2,
-            "name"=>"Молчание ягнят",
-            "actors"=>["Хопкинс","Вася пупкин"],
-            "year"=>2012,
-            "genres"=>["Ужасы","Комедия"],
-            "description"=>"Lorem ipsum ....",
-            "rate"=>4.2,
-            "img"=>"https://st.kp.yandex.net/images/film_iphone/iphone360_345.jpg"
-        ],
-        [
-            "id"=>3,
-            "name"=>"Молчание ягнят",
-            "actors"=>["Хопкинс","Вася пупкин"],
-            "year"=>2012,
-            "genres"=>["Ужасы","Комедия"],
-            "description"=>"Lorem ipsum ....",
-            "rate"=>4.2,
-            "img"=>"https://st.kp.yandex.net/images/film_iphone/iphone360_345.jpg"
-        ],
-        [
-            "id"=>14,
-            "name"=>"Молчание ягнят",
-            "actors"=>["Хопкинс","Вася пупкин"],
-            "year"=>2012,
-            "genres"=>["Ужасы","Комедия"],
-            "description"=>"Lorem ipsum ....",
-            "rate"=>4.2,
-            "img"=>"https://st.kp.yandex.net/images/film_iphone/iphone360_345.jpg"
-        ],
-        [
-            "id"=>5,
-            "name"=>"Молчание ягнят",
-            "actors"=>["Хопкинс","Вася пупкин"],
-            "year"=>2012,
-            "genres"=>["Ужасы","Комедия"],
-            "description"=>"Lorem ipsum ....",
-            "rate"=>4.2,
-            "img"=>"https://st.kp.yandex.net/images/film_iphone/iphone360_345.jpg"
-        ],
-        [
-            "id"=>6,
-            "name"=>"Молчание ягнят",
-            "actors"=>["Хопкинс","Вася пупкин"],
-            "year"=>2012,
-            "genres"=>["Ужасы","Комедия"],
-            "description"=>"Lorem ipsum ....",
-            "rate"=>4.2,
-            "img"=>"https://st.kp.yandex.net/images/film_iphone/iphone360_345.jpg"
-        ],
-        [
-            "id"=>7,
-            "name"=>"Молчание ягнят",
-            "actors"=>["Хопкинс","Вася пупкин"],
-            "year"=>2012,
-            "genres"=>["Ужасы","Комедия"],
-            "description"=>"Lorem ipsum ....",
-            "rate"=>4.2,
-            "img"=>"https://st.kp.yandex.net/images/film_iphone/iphone360_345.jpg"
-        ],
-        [
-            "id"=>8,
-            "name"=>"Молчание ягнят",
-            "actors"=>["Хопкинс","Вася пупкин"],
-            "year"=>2012,
-            "genres"=>["Ужасы","Комедия"],
-            "description"=>"Lorem ipsum ....",
-            "rate"=>4.2,
-            "img"=>"https://st.kp.yandex.net/images/film_iphone/iphone360_345.jpg"
-        ],
-    ];
-
 
 
 
@@ -97,23 +15,35 @@ class ControllerMain extends Controller
 
     public function index(Request $request){
         $view = view('main');
-        $view->films = $this->films;
+
+        $view->films = DB::table("films")->get();
         return $view;
     }
 
+
+    const SELECT_GENRES_BY_FILM_ID =
+        "SELECT name FROM genres"
+        ." INNER JOIN films_genres fg on genres.id = fg.genre_id "
+        ."WHERE film_id=:id";
+    const SELECT_ACTORS_BY_FILM_ID =
+        "SELECT name FROM actors "
+        ."WHERE film_id=:id";
+
     public function film(int $id){
 
-        $film = null;
-        foreach ($this->films as $f){
-            if($f["id"]==$id){
-                $film = $f;
-                break;
-            }
-        }
-
-        if($film == null){
+        $films = DB::select("SELECT * FROM films WHERE id=:id",["id"=>$id]);
+        if(count($films) == 0){
             return redirect()->to("/404");
         }
+
+        $film = $films[0];
+
+        $film->genres = DB::table('genres')
+            ->join('films_genres','id','genre_id')
+            ->where('films_genres.film_id',$id)
+            ->get();
+
+        $film->actors = DB::table('actors')->where('film_id',$id)->pluck('name')->toArray();
 
 
         $view = view('film');

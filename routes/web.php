@@ -21,3 +21,8 @@ Route::get("/","ControllerMain@index")->name("main");
 Route::get("/film/{id}","ControllerMain@film")
     ->where("id","[0-9]+")
     ->name("film");
+
+Route::prefix('admin')->group(function(){
+    Route::get("/","ControllerAdmin@index");
+    Route::post("/addfilm","ControllerAdmin@addfilm")->name("addfilmhandle");
+});
