@@ -10,7 +10,12 @@
                 <dd>{{$film->year}}</dd>
                 <dt><b>Актеры</b></dt>
                 <dd>
-                    {{implode(", ",$film->actors)}}
+                    @foreach($film->actors as $g)
+                        {{$g->name}}
+                        @if(!$loop->last)
+                            ,
+                        @endif
+                    @endforeach
                 </dd>
                 <dt><b>Жанры</b></dt>
                 <dd>
