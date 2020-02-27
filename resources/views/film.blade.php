@@ -20,7 +20,7 @@
                 <dt><b>Жанры</b></dt>
                 <dd>
                     @foreach($film->genres as $g)
-                        {{$g->name}}
+                        {{$g->name}} {{$g->pivot->x}}
                         @if(!$loop->last)
                             ,
                         @endif

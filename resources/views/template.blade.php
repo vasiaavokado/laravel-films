@@ -12,7 +12,20 @@
 </head>
 <body>
     <header>
+        @auth
+            {{Auth::user()->name}}
 
+            <form action="{{ route('logout') }}" method="post">
+                @csrf
+                <input type="submit" value="Logout">
+            </form>
+        @else
+            <a href="{{ route('login') }}">Login</a>
+
+            @if (Route::has('register'))
+                <a href="{{ route('register') }}">Register</a>
+            @endif
+        @endauth
     </header>
     <div class="container">
         @yield("main")

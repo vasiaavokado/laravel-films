@@ -18,6 +18,6 @@ class Film extends Model
             "films_genres",
             'film_id',
             'genre_id'
-        );
+        )->withPivot(['x']);
     }
 }

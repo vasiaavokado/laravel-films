@@ -129,6 +129,13 @@ return [
     */
 
     'custom' => [
+
+
+        'year'=>[
+            'required'=>'Укажите год',
+            'between'=>'Значение должно быть в интервале от :min до :max',
+        ],
+
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],

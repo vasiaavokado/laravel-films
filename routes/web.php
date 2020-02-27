@@ -15,14 +15,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
+Route::get("/", "ControllerMain@index")->name("main");
 
-
-Route::get("/","ControllerMain@index")->name("main");
-Route::get("/film/{id}","ControllerMain@film")
-    ->where("id","[0-9]+")
+Route::get("/film/{id}", [
+    'uses'=>"ControllerMain@film",
+    'middleware'=>['auth']
+])
+    ->where("id", "[0-9]+")
     ->name("film");
 
-Route::prefix('admin')->group(function(){
-    Route::get("/","ControllerAdmin@index");
-    Route::post("/addfilm","ControllerAdmin@addfilm")->name("addfilmhandle");
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get("/", "ControllerAdmin@index");
+    Route::post("/addfilm", "ControllerAdmin@addfilm")->name("addfilmhandle");
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
