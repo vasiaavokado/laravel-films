@@ -14,6 +14,13 @@
 </head>
 <body>
 <h1>Add film</h1>
+<ul>
+    @foreach($errors->all() as $e)
+        <li>{{$e}}</li>
+    @endforeach
+</ul>
+
+
 <form action="{{url()->route('addfilmhandle')}}" method="post" enctype="multipart/form-data">
     @csrf
     <dl>

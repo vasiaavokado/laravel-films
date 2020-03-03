@@ -26,7 +26,7 @@ class CreateFilmRequest extends FormRequest
         return [
             'name' => 'required',
             'year' => 'required|integer|between:1900,3000',
-            'description' => 'required|min:30|max:255',
+            'desc' => 'required|min:30|max:255',
             'genre' => 'required',
             'actors' => 'regex:/^([а-яА-ЯЁё\s]+,)*[а-яА-ЯЁё\s]+$/u',
             'img' => 'image',

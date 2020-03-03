@@ -2,11 +2,16 @@
 
 namespace App\Providers;
 
+use App\Services\ActorsService;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public $singletons = [
+        ActorsService::class => ActorsService::class,
+    ];
+
     /**
      * Register any application services.
      *
