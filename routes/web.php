@@ -24,9 +24,13 @@ Route::get("/film/{id}", [
     ->where("id", "[0-9]+")
     ->name("film");
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth','role:read_admin_panel'])->group(function () {
     Route::get("/", "ControllerAdmin@index");
     Route::post("/addfilm", "ControllerAdmin@addfilm")->name("addfilmhandle");
+    Route::post("/addroles", "ControllerAdmin@setRoles")
+        ->middleware("role:write_admin_panel")
+        ->name("saveuserroles");
+    Route::get("/users", "ControllerAdmin@users")->name("users");
 });
 
 Auth::routes();
