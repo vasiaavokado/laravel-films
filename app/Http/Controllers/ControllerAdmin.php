@@ -11,9 +11,12 @@ use App\Services\FilmService;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use mysql_xdevapi\Exception;
 
 class ControllerAdmin extends Controller
 {
@@ -87,6 +90,16 @@ class ControllerAdmin extends Controller
             return (int)$r;
         });
 
+
+        $currentUser = Auth::user();
+        $rolesStrTo = implode(",",$roles->all());
+        $rolesStrFrom = implode(",",$userRoles->all());
+        Log::info(
+            "Пользователь {$currentUser->name}"
+            ." изменил права пользователя {$user->name}[{$user->id}] "
+            ."c $rolesStrFrom на $rolesStrTo "
+        );
+
         $rolesForDetouch = $userRoles->filter(function ($role) use ($roles){
             return !$roles->contains($role);
         });
@@ -94,6 +107,8 @@ class ControllerAdmin extends Controller
         $rolesForAttach = $roles->filter(function ($role) use ($userRoles){
             return !$userRoles->contains($role);
         });
+
+
 
 
         DB::transaction(function () use ($rolesForDetouch,$user,$rolesForAttach){
